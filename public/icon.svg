@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#1a1a2e"/>
+  <!-- Snake body -->
+  <path d="M140 340 Q140 260 200 260 Q260 260 260 200 Q260 140 320 140 Q380 140 380 200 Q380 260 320 260 Q260 260 260 320 Q260 380 320 380" 
+        stroke="#4ade80" stroke-width="32" fill="none" stroke-linecap="round"/>
+  <!-- Snake head -->
+  <circle cx="320" cy="380" r="22" fill="#4ade80"/>
+  <!-- Eyes -->
+  <circle cx="312" cy="374" r="5" fill="white"/>
+  <circle cx="328" cy="374" r="5" fill="white"/>
+  <circle cx="313" cy="375" r="2.5" fill="#1a1a2e"/>
+  <circle cx="329" cy="375" r="2.5" fill="#1a1a2e"/>
+  <!-- Food -->
+  <circle cx="140" cy="340" r="16" fill="#ff6b6b"/>
+  <circle cx="140" cy="340" r="24" fill="rgba(255,82,82,0.2)"/>
+</svg>

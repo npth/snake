@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState, useEffect } from 'react';
 import { useSnakeGame } from './hooks/useSnakeGame';
 import type { Direction, Difficulty } from './hooks/useSnakeGame';
 import GameBoard from './components/GameBoard';
@@ -18,6 +18,52 @@ export default function App() {
     togglePause,
     changeDirection,
   } = useSnakeGame();
+
+  // PWA Install prompt
+  const [installPrompt, setInstallPrompt] = useState<Event | null>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [showInstallBanner, setShowInstallBanner] = useState(false);
+
+  useEffect(() => {
+    // Check if already installed
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setIsInstalled(true);
+      return;
+    }
+
+    const handleBeforeInstall = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+      // Show banner after a short delay
+      setTimeout(() => setShowInstallBanner(true), 2000);
+    };
+
+    const handleAppInstalled = () => {
+      setIsInstalled(true);
+      setShowInstallBanner(false);
+      setInstallPrompt(null);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstall = useCallback(async () => {
+    if (!installPrompt) return;
+    const event = installPrompt as any;
+    event.prompt();
+    const { outcome } = await event.userChoice;
+    if (outcome === 'accepted') {
+      setIsInstalled(true);
+      setShowInstallBanner(false);
+    }
+    setInstallPrompt(null);
+  }, [installPrompt]);
 
   // Touch/swipe controls
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -59,11 +105,41 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 text-white flex flex-col items-center justify-center p-4 select-none overflow-hidden">
+      {/* Install Banner */}
+      {showInstallBanner && !isInstalled && installPrompt && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-3 flex items-center justify-between shadow-lg animate-slide-down">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🐍</span>
+            <div>
+              <p className="font-semibold text-sm">Установить «Змейка»</p>
+              <p className="text-xs opacity-80">Играйте офлайн на своём устройстве</p>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowInstallBanner(false)}
+              className="px-3 py-1.5 text-xs rounded-lg bg-white/20 hover:bg-white/30 transition-colors"
+            >
+              Позже
+            </button>
+            <button
+              onClick={handleInstall}
+              className="px-3 py-1.5 text-xs rounded-lg bg-white text-green-700 font-semibold hover:bg-green-50 transition-colors"
+            >
+              Установить
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="w-full max-w-[500px] mb-3">
         <h1 className="text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent">
           🐍 Змейка
         </h1>
+        {isInstalled && (
+          <p className="text-center text-[10px] text-green-400/60 mt-1">✓ Приложение установлено</p>
+        )}
       </div>
 
       {/* Score Panel */}
@@ -126,6 +202,18 @@ export default function App() {
             </>
           )}
         </div>
+
+        {/* Install button (manual) */}
+        {!isInstalled && installPrompt && !showInstallBanner && (
+          <div className="flex justify-center">
+            <button
+              onClick={handleInstall}
+              className="px-5 py-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400 rounded-xl font-semibold text-xs transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-purple-500/25 flex items-center gap-2"
+            >
+              📲 Установить на устройство
+            </button>
+          </div>
+        )}
 
         {/* Difficulty Selector */}
         <div className="flex justify-center gap-2">
