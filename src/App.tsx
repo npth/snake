@@ -118,7 +118,7 @@ export default function App() {
       {/* Header */}
       <div className="w-full max-w-[500px] mb-3">
         <h1 className="text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-green-400 to-emerald-300 bg-clip-text text-transparent">
-          🐍 Змейка
+          🐍 Змейка The Best:
         </h1>
       </div>
 
