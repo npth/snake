@@ -1,0 +1,22 @@
+{
+  "name": "Змейка The Best:",
+  "short_name": "Змейка",
+  "description": "Классическая игра Змейка с управлением свайпами и клавиатурой",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#166534",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "lang": "ru",
+  "dir": "ltr"
+}
