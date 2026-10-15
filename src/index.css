@@ -27,3 +27,8 @@
 .animate-pulse-slow {
   animation: pulse-slow 2s ease-in-out infinite;
 }
+
+/* Prevent iOS zoom on double tap */
+* {
+  touch-action: manipulation;
+}

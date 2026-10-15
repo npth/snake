@@ -1,4 +1,4 @@
-const CACHE_NAME = 'snake-game-v1';
+const CACHE_NAME = 'snake-game-v3';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
